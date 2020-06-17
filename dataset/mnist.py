@@ -86,7 +86,7 @@ def _change_one_hot_label(X):
     return T
 
 
-def load_mnist(normalize=True, flatten=True, one_hot_label=False):
+def load_mnist(normalize=True, flatten=True, one_hot_label=True):
     if not os.path.exists(save_file):
         init_mnist()
 
@@ -110,4 +110,5 @@ def load_mnist(normalize=True, flatten=True, one_hot_label=False):
 
 
 if __name__ == '__main__':
-    init_mnist()
+    # init_mnist()
+    load_mnist()
