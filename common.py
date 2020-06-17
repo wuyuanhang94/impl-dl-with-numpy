@@ -1,6 +1,5 @@
 import numpy as np
 import copy
-from layers import ReLU
 
 def softmax(x):
     # x是一维的或者二维的
@@ -32,9 +31,6 @@ def crossEntropyLoss(y, t):
 
 if __name__ == "__main__":
     # 本地测试代码
-    x = np.array([[-1, 2, -2], [0, .2, 3]])
-    r1 = ReLU()
-    print("ReLU(x):\n", r1.forward(x))
     print("softmax(x):\n", softmax(x))
     y = np.array([-1, 2, -3, 4, 5])
     print("softmax(y):\n", softmax(y))
