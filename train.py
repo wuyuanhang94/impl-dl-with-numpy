@@ -1,7 +1,7 @@
 import numpy as np
 from common import *
 from layers import *
-from dataset import load_mnist
+from dataset.mnist import load_mnist
 from twolayernn import TwoLayerNet
 
 (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
