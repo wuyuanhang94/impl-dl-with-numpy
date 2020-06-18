@@ -34,7 +34,7 @@ for epoch in range(epoch_num):
 
     optimizer.update(network.params, grads)
 
-    if epoch % 500 == 0:
+    if epoch % 50 == 0:
         test_loss = network.loss(x_test, t_test)
         test_acc = network.accuracy(x_test, t_test)
         print("epoch: %4d" % epoch, "train_loss: %6f" % train_loss, "train_acc: %6f" % train_acc,
