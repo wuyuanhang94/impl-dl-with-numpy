@@ -20,7 +20,7 @@ class TwoLayerNet:
         self.lastLayer = SoftmaxWithLoss()
 
     def predict(self, x):
-        for layer in self.layers:
+        for layer in self.layers.values():
             x = layer.forward(x)
         return x
 
@@ -36,17 +36,19 @@ class TwoLayerNet:
         return np.sum(y == t) / x.shape[0]
 
     def gradient(self, x, t):
-        dout = 1
-        layers = list(self.layers).reverse()
+        dout = self.lastLayer.backward()
+
+        layers = list(self.layers.values())
+        layers.reverse() # 注意这个reverse是in-place的 返回值为None
 
         for layer in layers:
             dout = layer.backward(dout)
 
         grads = {}
-        grads['W1'] = self.layers['Affine1'].dW1
-        grads['b1'] = self.layers['Affine1'].db1
-        grads['W2'] = self.layers['Affine2'].dW2
-        grads['b2'] = self.layers['Affine2'].db2
+        grads['W1'] = self.layers['Affine1'].dW
+        grads['b1'] = self.layers['Affine1'].db
+        grads['W2'] = self.layers['Affine2'].dW
+        grads['b2'] = self.layers['Affine2'].db
 
         return grads
 

@@ -31,7 +31,7 @@ class Affine:
         return np.dot(self.x, self.W) + self.b
     
     def backward(self, dout):
-        self.dW = np.dot(self.x, dout)
+        self.dW = np.dot(self.x.T, dout)
         self.db = np.sum(dout, axis=0)
 
         dout = np.dot(dout, self.W.T)
@@ -45,6 +45,7 @@ class SoftmaxWithLoss:
     
     def forward(self, x, t):
         self.y = softmax(x)
+        self.t = t
         loss = crossEntropyLoss(self.y, t)
         return loss
 

@@ -2,7 +2,8 @@ import numpy as np
 from common import *
 from layers import *
 from dataset.mnist import load_mnist
-from twolayernn import TwoLayerNet
+# from twolayernn import TwoLayerNet
+from refactTLNN import TwoLayerNet
 
 (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
 
@@ -18,6 +19,8 @@ for epoch in range(epoch_num):
     x_batch = x_train[batch_mask]
     t_batch = t_train[batch_mask]
 
+    train_loss = network.loss(x_batch, t_batch)
+    train_acc = network.accuracy(x_batch, t_batch)
     grads = network.gradient(x_batch, t_batch)
 
     for key in ['W1', 'b1', 'W2', 'b2']:
@@ -26,9 +29,6 @@ for epoch in range(epoch_num):
         # print(grads[key].shape)
         # print(network.params[key].shape)
         network.params[key] -= learning_rate * grads[key]
-
-    train_loss = network.loss(x_batch, t_batch)
-    train_acc = network.accuracy(x_batch, t_batch)
 
     if epoch % 100 == 0:
         test_loss = network.loss(x_test, t_test)

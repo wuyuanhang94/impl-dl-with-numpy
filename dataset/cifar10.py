@@ -9,7 +9,6 @@ import pickle
 import os
 import numpy as np
 import tarfile
-from scipy.misc import imsave
 
 url_base = 'http://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz'
 
@@ -109,8 +108,8 @@ def load_cifar10(normalize=True, flatten=True, one_hot_label=True):
     if flatten:
         for key in ('x_train', 'x_test'):
             row = dataset[key].shape[0]
-            dataset[key] = dataset[key].reshape(-1, 1, 3*32*32)
+            dataset[key] = dataset[key].reshape(row, 3*32*32)
     
     return (dataset['x_train'], dataset['t_train']), (dataset['x_test'], dataset['t_test'])
 
-load_cifar10()
+# load_cifar10()
