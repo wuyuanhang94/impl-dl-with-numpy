@@ -20,7 +20,8 @@ learning_rate = 1e-4
 epoch_num = int(1e5)
 # 这个网络层次太浅 epoch_num到20000 精度已经上不去了 50%
 
-optimizer = SGD(lr=learning_rate)
+# optimizer = SGD(lr=learning_rate)
+optimizer = Momemtum(lr=learning_rate)
 
 for epoch in range(epoch_num):
     batch_mask = np.random.choice(train_size, batch_size)

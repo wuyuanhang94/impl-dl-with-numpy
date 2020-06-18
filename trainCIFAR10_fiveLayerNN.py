@@ -18,12 +18,13 @@ network = FiveLayerNet(input_size=3*32*32, hidden_size=500, output_size=10)
 # print(x_test.shape)
 # print(t_test.shape)
 
-batch_size = 256
+batch_size = 512
 train_size = x_train.shape[0]
-learning_rate = 1e-3
+learning_rate = 1e-4
 epoch_num = 80000
 # 20000 55% acc
 # 5层过拟合太严重了 52% max
+# 也就调调learning_rate, batch_size
 
 optimizer = SGD(lr=learning_rate)
 
