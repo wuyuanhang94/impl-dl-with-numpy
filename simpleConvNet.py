@@ -8,8 +8,8 @@ from collections import OrderedDict
 class ConvNet:
     # Conv -> ReLU -> Pool -> Affine -> ReLU -> Affine -> Softmax
     def __init__(self, input_dim=(1, 28, 28), 
-                 conv_param={'filter num': 30, 'filter size':5, 'pad':0, 'stride':1},
-                 hidden_size=100, output_size=50, weight_init_std=0.01):
+                 conv_param={'filter num': 50, 'filter size':5, 'pad':0, 'stride':1},
+                 hidden_size=100, output_size=50, weight_init_std=0.01, pretrained=False):
         filter_num = conv_param['filter_num']
         filter_size = conv_param['filter_size']
         filter_pad = conv_param['pad']
@@ -18,13 +18,18 @@ class ConvNet:
         conv_output_size = (input_size - filter_size + 2*filter_pad) / filter_stride + 1
         pool_output_size = int(filter_num * (conv_output_size/2) * (conv_output_size/2))
 
-        self.params = {}
-        self.params['W1'] = weight_init_std * np.random.randn(filter_num, input_dim[0], filter_size, filter_size) # Conv params
-        self.params['b1'] = weight_init_std * np.random.randn(filter_num)
-        self.params['W2'] = weight_init_std * np.random.randn(pool_output_size, hidden_size)
-        self.params['b2'] = weight_init_std * np.random.randn(hidden_size)
-        self.params['W3'] = weight_init_std * np.random.randn(hidden_size, output_size)
-        self.params['b3'] = weight_init_std * np.random.randn(output_size)
+        self.params = {'W1':None, 'b1':None,
+                       'W2':None, 'b2':None,
+                       'W3':None, 'b3':None}
+        if not pretrained:
+            self.params['W1'] = weight_init_std * np.random.randn(filter_num, input_dim[0], filter_size, filter_size) # Conv params
+            self.params['b1'] = weight_init_std * np.random.randn(filter_num)
+            self.params['W2'] = weight_init_std * np.random.randn(pool_output_size, hidden_size)
+            self.params['b2'] = weight_init_std * np.random.randn(hidden_size)
+            self.params['W3'] = weight_init_std * np.random.randn(hidden_size, output_size)
+            self.params['b3'] = weight_init_std * np.random.randn(output_size)
+        else:
+            self.loadParams()
 
         self.layers = OrderedDict()
         self.layers['Conv'] = Convolution(W=self.params['W1'], b=self.params['b1'])
@@ -33,7 +38,12 @@ class ConvNet:
         self.layers['Affine1'] = Affine(W=self.params['W2'], b=self.params['b2'])
         self.layers['ReLU2'] = ReLU()
         self.layers['Affine2'] = Affine(W=self.params['W3'], b=self.params['b3'])
-
+        
+        if pretrained:
+            for i, key in enumerate(['Conv', 'Affine1', 'Affine2']):
+                self.layers[key].W = self.params['W' + str(i+1)]
+                self.layers[key].b = self.params['b' + str(i+1)]
+        
         self.lastLayer = SoftmaxWithLoss()
 
     def predict(self, x):
@@ -89,6 +99,6 @@ class ConvNet:
         for key in self.params.keys():
             self.params[key] = params[key]
 
-        for i, key in enumerate(['Conv1', 'Affine1', 'Affine2']):
-            self.layers[key].W = self.params['W' + str(i+1)]
-            self.layers[key].b = self.params['b' + str(i+1)]
+        # for i, key in enumerate(['Conv1', 'Affine1', 'Affine2']):
+        #     self.layers[key].W = self.params['W' + str(i+1)]
+        #     self.layers[key].b = self.params['b' + str(i+1)]
