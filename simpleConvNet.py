@@ -27,12 +27,12 @@ class ConvNet:
         self.params['b3'] = weight_init_std * np.random.randn(output_size)
 
         self.layers = OrderedDict()
-        self.layers['Conv'] = Convolution(W=self.params['W1'], h=self.params['b1'])
+        self.layers['Conv'] = Convolution(W=self.params['W1'], b=self.params['b1'])
         self.layers['ReLu1'] = ReLU()
         self.layers['Pooling'] = Pooling(pool_h=2, pool_w=2, stride=2)
         self.layers['Affine1'] = Affine(W=self.params['W2'], b=self.params['b2'])
         self.layers['ReLU2'] = ReLU()
-        self.layers['Affine3'] = Affine(W=self.params['W3'], b=self.params['b3'])
+        self.layers['Affine2'] = Affine(W=self.params['W3'], b=self.params['b3'])
 
         self.lastLayer = SoftmaxWithLoss()
 
@@ -48,13 +48,15 @@ class ConvNet:
     
     def accuracy(self, x, t):
         y = self.predict(x)
-                
+        y = np.argmax(y, axis=1)
+        t = np.argmax(t, axis=1)
+        return 1.0 * np.sum(y == t) / x.shape[0]
 
     def gradient(self, x, t):
         # 应该限制gradient的调用时序 作为backward 先call forward
         # self.loss(x, t)
 
-        dout = 1
+        dout = 1 #对应着是loss 变化1 下面相关的变量变化多少
         dout = self.lastLayer.backward(dout)
 
         layers = list(self.layers.values())
@@ -78,7 +80,7 @@ class ConvNet:
         for key in self.params.keys():
             params[key] = self.params[key]
         with open('params.pkl', 'wb') as f:
-            pickle.dump(f, params)
+            pickle.dump(params, f)
 
     def loadParams(self):
         params = None
@@ -86,3 +88,7 @@ class ConvNet:
             params = pickle.load(f)
         for key in self.params.keys():
             self.params[key] = params[key]
+
+        for i, key in enumerate(['Conv1', 'Affine1', 'Affine2']):
+            self.layers[key].W = self.params['W' + str(i+1)]
+            self.layers[key].b = self.params['b' + str(i+1)]

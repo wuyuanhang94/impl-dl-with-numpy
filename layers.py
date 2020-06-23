@@ -20,13 +20,14 @@ class Affine:
         self.dW = None
         self.db = None
         self.x = None
-        self.original_x = None
+        self.original_x_shape = None
 
     def forward(self, x):
-        self.original_x = x
+        # 考虑单个输入也考虑batch data
+        # 对于pooling输出要展平 (100, 30, 12, 12)
+        self.original_x_shape = x.shape
+        x = x.reshape(x.shape[0], -1)
         self.x = x
-        if self.x.ndim == 1:
-            self.x.reshape(1, -1)
         return np.dot(self.x, self.W) + self.b
     
     def backward(self, dout):
@@ -34,6 +35,7 @@ class Affine:
         self.db = np.sum(dout, axis=0)
 
         dout = np.dot(dout, self.W.T)
+        dout = dout.reshape(*self.original_x_shape)
         return dout
 
 class SoftmaxWithLoss:
@@ -54,9 +56,9 @@ class SoftmaxWithLoss:
         return self.dy
 
 class Convolution:
-    def __init__(self, W, h, stride=1, pad=0):
+    def __init__(self, W, b, stride=1, pad=0):
         self.W = W
-        self.h = h
+        self.b = b
         self.stride = stride
         self.pad = pad
 
@@ -117,7 +119,7 @@ class Pooling:
         col = im2col(x, self.pool_h, self.pool_w, self.stride, self.pad)
         col = col.reshape(-1, self.pool_h * self.pool_w)
 
-        arg_max = np.arg_max(col, axis=1)
+        arg_max = np.argmax(col, axis=1)
         out = np.max(col, axis=1)
         out = out.reshape(N, out_h, out_w, C).transpose(0, 3, 1, 2)
 
