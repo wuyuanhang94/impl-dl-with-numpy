@@ -6,7 +6,7 @@ from trainer import Trainer
 (x_train, t_train), (x_test, t_test) = load_cifar10(flatten=False)
 # print(x_train.shape)
 network = ConvNet(input_dim=(3,32,32), 
-                  conv_param1={'filter num': 50, 'filter size': 5, 'pad': 0, 'stride': 1},
+                  conv_param1={'filter num': 50, 'filter size':5, 'pad':1, 'stride':1},
                   conv_param2={'filter num': 20, 'filter size':3, 'pad':1, 'stride':1},
                   output_size=10, weight_init_std=0.01, pretrained=False)
                         
