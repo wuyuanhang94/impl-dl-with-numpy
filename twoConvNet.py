@@ -44,7 +44,7 @@ class ConvNet:
         self.layers['Affine'] = Affine(W=self.params['W3'], b=self.params['b3'])
         
         if pretrained:
-            for i, key in enumerate(['Conv', 'Affine1', 'Affine2']):
+            for i, key in enumerate(['Conv1', 'Conv2', 'Affine']):
                 self.layers[key].W = self.params['W' + str(i+1)]
                 self.layers[key].b = self.params['b' + str(i+1)]
         

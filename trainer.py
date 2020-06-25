@@ -44,15 +44,15 @@ class Trainer:
             grads = self.network.gradient(x_batch, t_batch)
             self.optimizer.update(self.network.params, grads)
 
-            if i % 5 == 4:
-                test_batch_mask = np.random.choice(self.x_test.shape[0], 128)
-                x_test_batch = self.x_test[test_batch_mask]
-                t_test_batch = self.t_test[test_batch_mask]
-                test_loss = self.network.loss(x_test_batch, t_test_batch)
-                test_acc = self.network.accuracy(x_test_batch, t_test_batch)
-                print("epoch:%2d" % epoch, "iteration:%4d" % i, 
-                      "train_loss:%6f" % train_loss, "train_acc:%6f" % train_acc,
-                      "test_loss:%6f" % test_loss, "test_acc:%6f" % test_acc)
+            # if i % 5 == 4:
+            test_batch_mask = np.random.choice(self.x_test.shape[0], 128)
+            x_test_batch = self.x_test[test_batch_mask]
+            t_test_batch = self.t_test[test_batch_mask]
+            test_loss = self.network.loss(x_test_batch, t_test_batch)
+            test_acc = self.network.accuracy(x_test_batch, t_test_batch)
+            print("epoch:%2d" % epoch, "iteration:%4d" % i, 
+                    "train_loss:%6f" % train_loss, "train_acc:%6f" % train_acc,
+                    "test_loss:%6f" % test_loss, "test_acc:%6f" % test_acc)
 
     def train(self):
         for epoch in range(self.epochs):
