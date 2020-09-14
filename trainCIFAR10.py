@@ -9,11 +9,6 @@ from optimizer import *
 
 network = TwoLayerNet(input_size=3*32*32, hidden_size=100, output_size=10)
 
-# print(x_train.shape)
-# print(t_train.shape)
-# print(x_test.shape)
-# print(t_test.shape)
-
 batch_size = 256
 train_size = x_train.shape[0]
 learning_rate = 1e-2

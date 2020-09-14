@@ -4,7 +4,7 @@ from simpleConvNet import ConvNet
 from trainer import Trainer
 
 (x_train, t_train), (x_test, t_test) = load_cifar10(flatten=False)
-# print(x_train.shape)
+
 network = ConvNet(input_dim=(3,32,32), 
                   conv_param = {'filter_num': 50, 'filter_size': 5, 'pad': 0, 'stride': 1},
                   hidden_size=100, output_size=10, weight_init_std=0.01, pretrained=True)

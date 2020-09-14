@@ -1,11 +1,16 @@
 import numpy as np
-from common import *
-from layers import *
+import os
+import sys
+sys.path.append('..')
+from utils.common import *
+from utils.layers import *
 
 class TwoLayerNet:
     def __init__(self, input_size, hidden_size, output_size, weight_init_std=0.01):
         self.params = {}
+        # weight_init_std 不能太大 会过拟合 初始值设置参考Xavier or Kaiming
         self.params['W1'] = weight_init_std * np.random.randn(input_size, hidden_size)
+        # NN 有随机初始化的weights 已经打破对称性 bias可初始化全零
         self.params['b1'] = np.random.randn(hidden_size)  # (hidden_size, ) 利用numpy广播
         self.params['ReLU1'] = ReLU()
         self.params['W2'] = weight_init_std * np.random.randn(hidden_size, output_size)
@@ -30,17 +35,8 @@ class TwoLayerNet:
         return np.sum(y == t) / x.shape[0]
 
     def gradient(self, x, t):
-        # dout = 1
-        # y = self.predict(x)
-        # dout = dout * (y - t)
-
-        # 写到这里写不下去了吧 他也不傻 直接能call predict 为什么不call
-        # 需要每层的输出做backward
-        # 从这个过程可以看出
-        # dW2 = np.dot(dout, dout)
-        # db2 = dout
-
-        # dout = 
+        # todo：这里实现不高效
+        # 详见refactTLNN.py 
         a1 = np.dot(x, self.params['W1']) + self.params['b1']
         z1 = self.params['ReLU1'].forward(a1)
         a2 = np.dot(z1, self.params['W2']) + self.params['b2']
@@ -53,7 +49,7 @@ class TwoLayerNet:
         db2 = np.sum(dy, axis=0)
 
         dz1 = np.dot(dy, self.params['W2'].T)
-        # 这里ReLU的backward就做不动了，因为forward时mask没有保存
+        # 这里ReLU的backward做不动，因为forward时mask没有保存
         # 同理其他layer也需要单独封装 保存中间结果 才能backward
         da1 = self.params['ReLU1'].backward(dz1)
 
@@ -67,9 +63,3 @@ class TwoLayerNet:
         grads['b2'] = db2
 
         return grads
-
-
-
-
-
-

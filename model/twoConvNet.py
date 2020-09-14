@@ -1,8 +1,11 @@
 import pickle
 import numpy as np
-from layers import *
-from optimizer import *
-from common import *
+import os
+import sys
+sys.path.append('..')
+from utils.common import *
+from utils.layers import *
+from utils.optimizer import *
 from collections import OrderedDict
 
 class ConvNet:

@@ -1,8 +1,11 @@
 import pickle
 import numpy as np
-from layers import *
-from optimizer import *
-from common import *
+import os
+import sys
+sys.path.append('..')
+from utils.common import *
+from utils.layers import *
+from utils.optimizer import *
 from collections import OrderedDict
 
 class ConvNet:
@@ -98,7 +101,3 @@ class ConvNet:
             params = pickle.load(f)
         for key in self.params.keys():
             self.params[key] = params[key]
-
-        # for i, key in enumerate(['Conv1', 'Affine1', 'Affine2']):
-        #     self.layers[key].W = self.params['W' + str(i+1)]
-        #     self.layers[key].b = self.params['b' + str(i+1)]

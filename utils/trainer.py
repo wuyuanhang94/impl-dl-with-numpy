@@ -1,6 +1,10 @@
 import numpy as np
-from common import *
-from optimizer import *
+import os
+import sys
+sys.path.append('..')
+from utils.common import *
+from utils.layers import *
+from utils.optimizer import *
 
 class Trainer:
     def __init__(self, network, x_train, t_train, x_test, t_test,
@@ -35,7 +39,6 @@ class Trainer:
 
             train_loss = self.network.loss(x_batch, t_batch)
             train_acc = self.network.accuracy(x_batch, t_batch)
-            # print("train_loss:", train_loss, "train_acc", train_acc)
 
             if train_loss < self.best_train_loss:
                 self.best_train_loss = train_loss
@@ -43,16 +46,15 @@ class Trainer:
 
             grads = self.network.gradient(x_batch, t_batch)
             self.optimizer.update(self.network.params, grads)
-
-            # if i % 5 == 4:
-            test_batch_mask = np.random.choice(self.x_test.shape[0], 128)
-            x_test_batch = self.x_test[test_batch_mask]
-            t_test_batch = self.t_test[test_batch_mask]
-            test_loss = self.network.loss(x_test_batch, t_test_batch)
-            test_acc = self.network.accuracy(x_test_batch, t_test_batch)
-            print("epoch:%2d" % epoch, "iteration:%4d" % i, 
-                    "train_loss:%6f" % train_loss, "train_acc:%6f" % train_acc,
-                    "test_loss:%6f" % test_loss, "test_acc:%6f" % test_acc)
+            if i % 50 == 0:
+                test_batch_mask = np.random.choice(self.x_test.shape[0], 128)
+                x_test_batch = self.x_test[test_batch_mask]
+                t_test_batch = self.t_test[test_batch_mask]
+                test_loss = self.network.loss(x_test_batch, t_test_batch)
+                test_acc = self.network.accuracy(x_test_batch, t_test_batch)
+                print("epoch:%2d" % epoch, "iteration:%4d" % i, 
+                        "train_loss:%6f" % train_loss, "train_acc:%6f" % train_acc,
+                        "test_loss:%6f" % test_loss, "test_acc:%6f" % test_acc)
 
     def train(self):
         for epoch in range(self.epochs):

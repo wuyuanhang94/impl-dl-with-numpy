@@ -10,14 +10,6 @@ from optimizer import *
 (x_train, t_train), (x_test, t_test) = load_cifar10()
 network = FiveLayerNet(input_size=3*32*32, hidden_size=500, output_size=10)
 
-# (x_train, t_train), (x_test, t_test) = load_mnist()
-# network = FiveLayerNet(input_size=1*28*28, hidden_size=500, output_size=10)
-
-# print(x_train.shape)
-# print(t_train.shape)
-# print(x_test.shape)
-# print(t_test.shape)
-
 batch_size = 512
 train_size = x_train.shape[0]
 learning_rate = 1e-4

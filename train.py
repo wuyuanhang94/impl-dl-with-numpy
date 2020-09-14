@@ -1,9 +1,11 @@
 import numpy as np
-from common import *
-from layers import *
+import os
+import sys
+sys.path.append('..')
+from utils.common import *
+from utils.layers import *
 from dataset.mnist import load_mnist
-# from twolayernn import TwoLayerNet
-from refactTLNN import TwoLayerNet
+from model.refactTLNN import TwoLayerNet
 
 (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
 
@@ -24,10 +26,6 @@ for epoch in range(epoch_num):
     grads = network.gradient(x_batch, t_batch)
 
     for key in ['W1', 'b1', 'W2', 'b2']:
-        # print(grads[key].shape)
-        # print(key)
-        # print(grads[key].shape)
-        # print(network.params[key].shape)
         network.params[key] -= learning_rate * grads[key]
 
     if epoch % 100 == 0:
