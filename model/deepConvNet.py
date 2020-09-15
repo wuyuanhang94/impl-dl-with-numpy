@@ -1,8 +1,11 @@
 import numpy as np
 import pickle
 from collections import OrderedDict
-from layers import *
-
+import os
+import sys
+sys.path.append('..')
+from utils.common import *
+from utils.layers import *
 class DeepConvNet:
     # Conv -> ReLU -> Conv -> ReLU -> Pool ->
     # Conv -> ReLU -> Conv -> ReLU -> Pool ->
